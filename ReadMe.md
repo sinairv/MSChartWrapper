@@ -52,5 +52,7 @@ Highlighting the UI features:
 MSChartWrapper is hosted at github. Find the recent modifications here: https://github.com/sinairv/MSChartWrapper
 
 Sina Iravanian: sina@sinairv.com
+
 Homepage: http://www.sinairv.com
+
 Github: https://github.com/sinairv
