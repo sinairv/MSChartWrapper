@@ -1,7 +1,7 @@
 *.suo
 *.user
-bin/
+*.pdb
+*.vshost.exe
 obj/
-*.[Cc]ache
 _ReSharper*/
 
