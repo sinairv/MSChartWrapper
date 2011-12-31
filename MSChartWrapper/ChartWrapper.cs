@@ -396,7 +396,7 @@ namespace MSChartWrapper
                 {
                     var ptSeriesPoints = ptSeries.Points;
                     for (int i = 0; i < values.Length; i += markerFreq)
-                        ptSeriesPoints.AddXY(i, values[i]);
+                        ptSeriesPoints.AddXY(i + 1, values[i]);
                 }
             }
 
