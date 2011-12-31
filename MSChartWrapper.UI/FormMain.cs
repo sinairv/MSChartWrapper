@@ -42,30 +42,46 @@ namespace MSChartWrapper.UI
 
         private void BtnLineChartWindowClick(object sender, EventArgs e)
         {
-            const int GraphLength = 630;
-            var sine = new double[GraphLength];
-            var cosine = new double[GraphLength];
+            const int graphLength = 630;
+            var sine = new double[graphLength];
+            var cosine = new double[graphLength];
 
-            for (int i = 0; i < GraphLength; i++)
+            for (int i = 0; i < graphLength; i++)
             {
                 sine[i] = Math.Sin(i * 0.01);
                 cosine[i] = Math.Cos(i * 0.01);
             }
 
-            ChartForm.ShowLineChartForm(this,
-                new[] { "Sine", "Cosine" }, new[] { sine, cosine }, 
+            ChartForm.ShowLineChartForm(new[] { "Sine", "Cosine" }, new[] { sine, cosine },
                 "Sine vs Cosine", "x", "value", "Line Chart Window Demo");
         }
 
         private void BtnBarChartWindowClick(object sender, EventArgs e)
         {
-            int[] vals1 = new[] { 1, 3, 5, 2, 7 };
-            int[] vals2 = new[] { 7, 5, 3, 2, 1 };
-            string[] labels = new [] {"year 1", "year 2", "year 3", "year 4", "year 5"};
+            var vals1 = new[] { 1, 3, 5, 2, 7 };
+            var vals2 = new[] { 7, 5, 3, 2, 1 };
+            var labels = new [] {"year 1", "year 2", "year 3", "year 4", "year 5"};
 
-            ChartForm.ShowBarChartForm(this, new[] { "Company 1", "Company 2" }, labels,
+            ChartForm.ShowBarChartForm(new[] { "Company 1", "Company 2" }, labels,
                 new[] { vals1, vals2 }, "Performance of Companies", 
                 "year", "income in billion dollars", "Bar Chart Window Demo");
+        }
+
+        private void BtnLineChartCustomWindowClick(object sender, EventArgs e)
+        {
+            const int graphLength = 630;
+            var sine = new double[graphLength];
+            var cosine = new double[graphLength];
+
+            for (int i = 0; i < graphLength; i++)
+            {
+                sine[i] = Math.Sin(i * 0.01);
+                cosine[i] = Math.Cos(i * 0.01);
+            }
+
+            ChartForm.ShowLineChartFormModal(new[] { "Sine", "Cosine" }, new[] { sine, cosine },
+                "Sine vs Cosine", "x", "value", "Line Chart Window Demo",
+                this, cw => cw.AddMarkers = false );
         }
     }
 }

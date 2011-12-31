@@ -38,6 +38,7 @@ namespace MSChartWrapper.UI
             this.btnClearChart = new System.Windows.Forms.Button();
             this.btnLineChartWindow = new System.Windows.Forms.Button();
             this.btnBarChartWindow = new System.Windows.Forms.Button();
+            this.btnLineChartCustomWindow = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnAddLine
@@ -62,8 +63,8 @@ namespace MSChartWrapper.UI
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid1.Location = new System.Drawing.Point(775, 32);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(245, 654);
@@ -72,16 +73,18 @@ namespace MSChartWrapper.UI
             // chartWrapper
             // 
             this.chartWrapper.AddMarkers = true;
-            this.chartWrapper.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartWrapper.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chartWrapper.AxisXTitle = "";
             this.chartWrapper.AxisYTitle = "";
+            this.chartWrapper.LegendVisible = false;
             this.chartWrapper.Location = new System.Drawing.Point(8, 32);
             this.chartWrapper.MarkerCounts = 15;
             this.chartWrapper.MarkerFreq = 0;
             this.chartWrapper.MarkerSize = 8;
             this.chartWrapper.Name = "chartWrapper";
+            this.chartWrapper.SideLegendVisible = true;
             this.chartWrapper.Size = new System.Drawing.Size(761, 654);
             this.chartWrapper.TabIndex = 0;
             this.chartWrapper.Title = "Chart Title";
@@ -116,11 +119,22 @@ namespace MSChartWrapper.UI
             this.btnBarChartWindow.UseVisualStyleBackColor = true;
             this.btnBarChartWindow.Click += new System.EventHandler(this.BtnBarChartWindowClick);
             // 
+            // btnLineChartCustomWindow
+            // 
+            this.btnLineChartCustomWindow.Location = new System.Drawing.Point(610, 3);
+            this.btnLineChartCustomWindow.Name = "btnLineChartCustomWindow";
+            this.btnLineChartCustomWindow.Size = new System.Drawing.Size(109, 23);
+            this.btnLineChartCustomWindow.TabIndex = 8;
+            this.btnLineChartCustomWindow.Text = "Custom Window";
+            this.btnLineChartCustomWindow.UseVisualStyleBackColor = true;
+            this.btnLineChartCustomWindow.Click += new System.EventHandler(this.BtnLineChartCustomWindowClick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1023, 692);
+            this.Controls.Add(this.btnLineChartCustomWindow);
             this.Controls.Add(this.btnBarChartWindow);
             this.Controls.Add(this.btnLineChartWindow);
             this.Controls.Add(this.btnClearChart);
@@ -145,6 +159,7 @@ namespace MSChartWrapper.UI
         private System.Windows.Forms.Button btnClearChart;
         private System.Windows.Forms.Button btnLineChartWindow;
         private System.Windows.Forms.Button btnBarChartWindow;
+        private System.Windows.Forms.Button btnLineChartCustomWindow;
     }
 }
 
