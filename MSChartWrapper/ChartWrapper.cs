@@ -22,6 +22,7 @@ namespace MSChartWrapper
         protected int m_colorCounter = -1;
         protected int m_markerCounter = -1;
         protected bool m_isLegendVisible = false;
+        protected bool m_isSideLegendVisible = true;
 
         protected const string SeriesPrefix = "_pt_";
 
@@ -47,6 +48,9 @@ namespace MSChartWrapper
         public ChartWrapper()
         {
             InitializeComponent();
+
+            SideLegendVisible = true;
+
             mainChart.Series.Clear();
             mainChart.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
             mainChart.ChartAreas[0].AxisX.MinorGrid.Enabled = false;
@@ -187,6 +191,65 @@ namespace MSChartWrapper
             set
             {
                 lblTitle.Text = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the chart legend is visible.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the chart legend is visible; otherwise, <c>false</c>.
+        /// </value>
+        [Category("ChartWrapper")]
+        [Description("Gets or sets a value indicating whether the chart legend is visible")]
+        public bool LegendVisible
+        {
+            get { return m_isLegendVisible; }
+
+            set
+            {
+                m_isLegendVisible = value;
+
+                if (!m_isLegendVisible)
+                {
+                    mainChart.Legends.Clear();
+                    mainChart.ChartAreas[0].Position.Auto = true;
+                }
+                else
+                {
+                    foreach (string name in m_seriesNames)
+                    {
+                        mainChart.Legends.Add(name);
+                    }
+
+                    mainChart.ChartAreas[0].Position.Width = 80.0f;
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the side legend is visible.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the side legend is visible; otherwise, <c>false</c>.
+        /// </value>
+        [Category("ChartWrapper")]
+        [Description("Gets or sets a value indicating whether the side legend is visible")]
+        public bool SideLegendVisible { 
+            get 
+            { 
+                return m_isSideLegendVisible; 
+            } 
+
+            set
+            {
+                m_isSideLegendVisible = value;
+                if (m_isSideLegendVisible && m_seriesNames.Count > 1)
+                    splitContainer.Panel1Collapsed = false;
+                else
+                    splitContainer.Panel1Collapsed = true;
             }
         }
 
@@ -407,6 +470,9 @@ namespace MSChartWrapper
             legendPanel.AutoSize = false;
             legendPanel.Width = Math.Max(legendPanel.Width, ckBox.Width + 30);
             legendPanel.Controls.Add(ckBox);
+
+            if (SideLegendVisible && splitContainer.Panel1Collapsed)
+                splitContainer.Panel1Collapsed = false;
         }
 
         #endregion
@@ -466,40 +532,17 @@ namespace MSChartWrapper
 
         protected void ShowLegendToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (m_isLegendVisible)
-            {
-                mainChart.Legends.Clear();
-                mainChart.ChartAreas[0].Position.Auto = true;
-            }
-            else
-            {
-                foreach (string name in m_seriesNames)
-                {
-                    mainChart.Legends.Add(name);
-                }
-
-                //if (AddMarkers)
-                //{
-                //    foreach (string name in m_markerSeriesNames)
-                //    {
-                //        mainChart.Legends.Add(name);
-                //    }
-                //}
-                //else
-                //{
-                //    foreach (string name in m_seriesNames)
-                //    {
-                //        mainChart.Legends.Add(name);
-                //    }
-                //}
-
-                mainChart.ChartAreas[0].Position.Width = 80.0f;
-
-            }
-            m_isLegendVisible = !m_isLegendVisible;
+            LegendVisible = !LegendVisible;
         }
 
+        private void ToggleShowSideLegendToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            SideLegendVisible = !SideLegendVisible;
+        }
+
+
         #endregion
+
 
     }
 }

@@ -43,6 +43,22 @@ namespace MSChartWrapper.UI
         }
 
         [Category("ChartWrapper")]
+        [Description("Gets or sets a value indicating whether the chart legend is visible")]
+        public bool LegendVisible
+        {
+            get { return m_chartWrapper.LegendVisible; }
+            set { m_chartWrapper.LegendVisible = value; }
+        }
+
+        [Category("ChartWrapper")]
+        [Description("Gets or sets a value indicating whether the side legend is visible")]
+        public bool SideLegendVisible
+        {
+            get { return m_chartWrapper.SideLegendVisible; }
+            set { m_chartWrapper.SideLegendVisible = value; }
+        }
+
+        [Category("ChartWrapper")]
         [Description("Indicates whether a marker (circle, " +
         "square, and other shapes added onto a line to distinguish " +
         "it from other lines) must be assigned to each line series")]
