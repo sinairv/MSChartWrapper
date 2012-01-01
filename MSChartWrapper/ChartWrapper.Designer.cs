@@ -78,31 +78,31 @@
             this.toolStripMenuItem1,
             this.saveToolStripMenuItem});
             this.contextMenuStripChart.Name = "contextMenuStrip1";
-            this.contextMenuStripChart.Size = new System.Drawing.Size(211, 76);
+            this.contextMenuStripChart.Size = new System.Drawing.Size(179, 98);
             // 
             // showLegendToolStripMenuItem
             // 
             this.showLegendToolStripMenuItem.Name = "showLegendToolStripMenuItem";
-            this.showLegendToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.showLegendToolStripMenuItem.Text = "Toggle Show Legend";
+            this.showLegendToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.showLegendToolStripMenuItem.Text = "Toggle Legend";
             this.showLegendToolStripMenuItem.Click += new System.EventHandler(this.ShowLegendToolStripMenuItemClick);
             // 
             // toggleShowSideLegendToolStripMenuItem
             // 
             this.toggleShowSideLegendToolStripMenuItem.Name = "toggleShowSideLegendToolStripMenuItem";
-            this.toggleShowSideLegendToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-            this.toggleShowSideLegendToolStripMenuItem.Text = "Toggle Show Side Legend";
+            this.toggleShowSideLegendToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.toggleShowSideLegendToolStripMenuItem.Text = "Toggle Side Legend";
             this.toggleShowSideLegendToolStripMenuItem.Click += new System.EventHandler(this.ToggleShowSideLegendToolStripMenuItemClick);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(207, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(175, 6);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.saveToolStripMenuItem.Text = "Save Chart as";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
             // 
