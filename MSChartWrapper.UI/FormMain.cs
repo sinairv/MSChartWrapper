@@ -26,13 +26,13 @@ namespace MSChartWrapper.UI
             chartWrapper.AddLinePlot("Random " + m_numCharts++, arSer);
         }
 
-        private void BtnAddBarClick(object sender, EventArgs e)
+        private void BtnAddColumnClick(object sender, EventArgs e)
         {
             var arSer = new double[ArraySize];
             for (int i = 0; i < ArraySize; i++)
                 arSer[i] = s_rnd.NextDouble()*10;
 
-            chartWrapper.AddBarPlot("Random " + m_numCharts++, (from n in arSer select n.ToString("F03")).ToArray(), arSer);
+            chartWrapper.AddColumnPlot("Random " + m_numCharts++, (from n in arSer select n.ToString("F03")).ToArray(), arSer);
         }
 
         private void BtnClearChartClick(object sender, EventArgs e)
@@ -56,15 +56,15 @@ namespace MSChartWrapper.UI
                 "Sine vs Cosine", "x", "value", "Line Chart Window Demo");
         }
 
-        private void BtnBarChartWindowClick(object sender, EventArgs e)
+        private void BtnColumnChartWindowClick(object sender, EventArgs e)
         {
             var vals1 = new[] { 1, 3, 5, 2, 7 };
             var vals2 = new[] { 7, 5, 3, 2, 1 };
             var labels = new [] {"year 1", "year 2", "year 3", "year 4", "year 5"};
 
-            ChartForm.ShowBarChartForm(new[] { "Company 1", "Company 2" }, labels,
+            ChartForm.ShowColumnChartForm(new[] { "Company 1", "Company 2" }, labels,
                 new[] { vals1, vals2 }, "Performance of Companies", 
-                "year", "income in billion dollars", "Bar Chart Window Demo");
+                "year", "income in billion dollars", "Column Chart Window Demo");
         }
 
         private void BtnLineChartCustomWindowClick(object sender, EventArgs e)

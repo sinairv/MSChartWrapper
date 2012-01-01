@@ -32,12 +32,12 @@ namespace MSChartWrapper.UI
         private void InitializeComponent()
         {
             this.btnAddLine = new System.Windows.Forms.Button();
-            this.btnAddBar = new System.Windows.Forms.Button();
+            this.btnAddColumn = new System.Windows.Forms.Button();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.chartWrapper = new MSChartWrapper.ChartWrapper();
             this.btnClearChart = new System.Windows.Forms.Button();
             this.btnLineChartWindow = new System.Windows.Forms.Button();
-            this.btnBarChartWindow = new System.Windows.Forms.Button();
+            this.btnColumnChartWindow = new System.Windows.Forms.Button();
             this.btnLineChartCustomWindow = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -51,15 +51,15 @@ namespace MSChartWrapper.UI
             this.btnAddLine.UseVisualStyleBackColor = true;
             this.btnAddLine.Click += new System.EventHandler(this.BtnAddLineClick);
             // 
-            // btnAddBar
+            // btnAddColumn
             // 
-            this.btnAddBar.Location = new System.Drawing.Point(123, 3);
-            this.btnAddBar.Name = "btnAddBar";
-            this.btnAddBar.Size = new System.Drawing.Size(109, 23);
-            this.btnAddBar.TabIndex = 2;
-            this.btnAddBar.Text = "Add Bar";
-            this.btnAddBar.UseVisualStyleBackColor = true;
-            this.btnAddBar.Click += new System.EventHandler(this.BtnAddBarClick);
+            this.btnAddColumn.Location = new System.Drawing.Point(123, 3);
+            this.btnAddColumn.Name = "btnAddColumn";
+            this.btnAddColumn.Size = new System.Drawing.Size(109, 23);
+            this.btnAddColumn.TabIndex = 2;
+            this.btnAddColumn.Text = "Add Column Chart";
+            this.btnAddColumn.UseVisualStyleBackColor = true;
+            this.btnAddColumn.Click += new System.EventHandler(this.BtnAddColumnClick);
             // 
             // propertyGrid1
             // 
@@ -109,15 +109,15 @@ namespace MSChartWrapper.UI
             this.btnLineChartWindow.UseVisualStyleBackColor = true;
             this.btnLineChartWindow.Click += new System.EventHandler(this.BtnLineChartWindowClick);
             // 
-            // btnBarChartWindow
+            // btnColumnChartWindow
             // 
-            this.btnBarChartWindow.Location = new System.Drawing.Point(495, 3);
-            this.btnBarChartWindow.Name = "btnBarChartWindow";
-            this.btnBarChartWindow.Size = new System.Drawing.Size(109, 23);
-            this.btnBarChartWindow.TabIndex = 7;
-            this.btnBarChartWindow.Text = "Bar Chart Window";
-            this.btnBarChartWindow.UseVisualStyleBackColor = true;
-            this.btnBarChartWindow.Click += new System.EventHandler(this.BtnBarChartWindowClick);
+            this.btnColumnChartWindow.Location = new System.Drawing.Point(495, 3);
+            this.btnColumnChartWindow.Name = "btnColumnChartWindow";
+            this.btnColumnChartWindow.Size = new System.Drawing.Size(109, 23);
+            this.btnColumnChartWindow.TabIndex = 7;
+            this.btnColumnChartWindow.Text = "Column Chart Window";
+            this.btnColumnChartWindow.UseVisualStyleBackColor = true;
+            this.btnColumnChartWindow.Click += new System.EventHandler(this.BtnColumnChartWindowClick);
             // 
             // btnLineChartCustomWindow
             // 
@@ -135,11 +135,11 @@ namespace MSChartWrapper.UI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1023, 692);
             this.Controls.Add(this.btnLineChartCustomWindow);
-            this.Controls.Add(this.btnBarChartWindow);
+            this.Controls.Add(this.btnColumnChartWindow);
             this.Controls.Add(this.btnLineChartWindow);
             this.Controls.Add(this.btnClearChart);
             this.Controls.Add(this.propertyGrid1);
-            this.Controls.Add(this.btnAddBar);
+            this.Controls.Add(this.btnAddColumn);
             this.Controls.Add(this.btnAddLine);
             this.Controls.Add(this.chartWrapper);
             this.MinimumSize = new System.Drawing.Size(590, 410);
@@ -154,11 +154,11 @@ namespace MSChartWrapper.UI
 
         private ChartWrapper chartWrapper;
         private System.Windows.Forms.Button btnAddLine;
-        private System.Windows.Forms.Button btnAddBar;
+        private System.Windows.Forms.Button btnAddColumn;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.Button btnClearChart;
         private System.Windows.Forms.Button btnLineChartWindow;
-        private System.Windows.Forms.Button btnBarChartWindow;
+        private System.Windows.Forms.Button btnColumnChartWindow;
         private System.Windows.Forms.Button btnLineChartCustomWindow;
     }
 }

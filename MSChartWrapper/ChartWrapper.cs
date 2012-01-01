@@ -321,13 +321,13 @@ namespace MSChartWrapper
         }
 
         /// <summary>
-        /// Adds a bar plot to the chart.
+        /// Adds a column plot to the chart.
         /// </summary>
         /// <typeparam name="T">The type of the values</typeparam>
         /// <param name="name">The name of the series.</param>
         /// <param name="labels">The labels.</param>
         /// <param name="values">The values.</param>
-        public void AddBarPlot<T>(string name, string[] labels, T[] values)
+        public void AddColumnPlot<T>(string name, string[] labels, T[] values)
         {
             if (m_seriesNames.Count == 1)
             {
