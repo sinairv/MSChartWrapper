@@ -846,7 +846,5 @@ namespace MSChartWrapper
 
 
         #endregion
-
-
     }
 }

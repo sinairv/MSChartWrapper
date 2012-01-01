@@ -189,7 +189,5 @@ namespace MSChartWrapper
             ShowColumnChartFormBase(owner, true, customization,
                 names, labels, values, chartTitle, xTitle, yTitle, formTitle);
         }
-
-        
     }
 }
