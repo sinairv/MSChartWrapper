@@ -7,6 +7,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.IO;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 namespace MSChartWrapper
 {
@@ -24,7 +25,7 @@ namespace MSChartWrapper
         protected bool m_isLegendVisible = false;
         protected bool m_isSideLegendVisible = true;
 
-        protected const string SeriesPrefix = "_pt_";
+        protected const string SeriesMarkerPrefix = "_pt_";
 
         protected static readonly Color[] PredefinedColors = new[] 
             {
@@ -37,6 +38,13 @@ namespace MSChartWrapper
             MarkerStyle.Star10, MarkerStyle.Star4, MarkerStyle.Star5, MarkerStyle.Star6,
             MarkerStyle.Triangle
         };
+
+        protected static readonly string[] MatlabMarkers = new[]
+        { 
+            "o", "+", "diamond"
+        };
+
+
 
         #endregion
 
@@ -289,27 +297,35 @@ namespace MSChartWrapper
         /// </summary>
         public void SaveChart()
         {
-            var dlg = new SaveFileDialog {Filter = "png|*.png|jpg|*.jpg|tiff|*.tiff"};
+            var dlg = new SaveFileDialog {Filter = "MATLAB M File|*.m|png|*.png|jpg|*.jpg|tiff|*.tiff"};
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
             string ext = Path.GetExtension(dlg.FileName);
             Debug.Assert(ext != null);
-            ChartImageFormat format = ChartImageFormat.Jpeg;
-
-            switch (ext.ToLower())
+            ext = ext.ToLower();
+            if (ext == ".m")
             {
-                case ".jpg":
-                    format = ChartImageFormat.Jpeg;
-                    break;
-                case ".png":
-                    format = ChartImageFormat.Png;
-                    break;
-                case ".tiff":
-                    format = ChartImageFormat.Tiff;
-                    break;
+                File.WriteAllText(dlg.FileName, SaveAsMatlab());
             }
-            mainChart.SaveImage(dlg.FileName, format);
+            else
+            {
+                ChartImageFormat format = ChartImageFormat.Jpeg;
+
+                switch (ext)
+                {
+                    case ".jpg":
+                        format = ChartImageFormat.Jpeg;
+                        break;
+                    case ".png":
+                        format = ChartImageFormat.Png;
+                        break;
+                    case ".tiff":
+                        format = ChartImageFormat.Tiff;
+                        break;
+                }
+                mainChart.SaveImage(dlg.FileName, format);
+            }
         }
 
         /// <summary>
@@ -373,7 +389,7 @@ namespace MSChartWrapper
             {
                 curSeries.IsVisibleInLegend = false;
 
-                string ptSeriesName = SeriesPrefix + serName;
+                string ptSeriesName = SeriesMarkerPrefix + serName;
                 Series ptSeries = mainChart.Series.Add(ptSeriesName);
                 ptSeries.LegendText = serName;
                 m_markerSeriesNames.Add(ptSeriesName);
@@ -422,6 +438,177 @@ namespace MSChartWrapper
 
         #region Non-Public Methods
 
+        protected string SaveAsMatlab()
+        {
+            var sbBeforeLegend = new StringBuilder(1000);
+            var sbAfterLegend = new StringBuilder(1000);
+            var sbLegendString = new StringBuilder(100);
+
+            sbBeforeLegend.AppendLine("figure;");
+
+            var sers = TheChart.Series;
+            var serCount = sers.Count;
+
+            bool hasLegend = false;
+            for (int si = 0; si < serCount; si++)
+            {
+                var curSer = sers[si];
+                if (curSer.ChartType == SeriesChartType.Bar)
+                {
+                }
+                else
+                {
+                    if (!curSer.Name.StartsWith(SeriesMarkerPrefix)) // if not a marker
+                    {
+                        sbAfterLegend.AppendLine(LineSeriesToMatlabVar(curSer, si, 10));
+                        sbAfterLegend.AppendLine().AppendLine("hold on");
+                        if (!AddMarkers)
+                        {
+                            hasLegend = true;
+                            if (sbLegendString.Length > 0)
+                                sbLegendString.Append(", ");
+                            sbLegendString.AppendFormat("'{0}'", curSer.LegendText);
+                        }
+                    }
+                    else
+                    {
+                        sbBeforeLegend.AppendLine(LineSeriesToMatlabVar(curSer, si, 10));
+                        sbBeforeLegend.AppendLine().AppendLine("hold on");
+                        if (AddMarkers)
+                        {
+                            hasLegend = true;
+                            if (sbLegendString.Length > 0)
+                                sbLegendString.Append(", ");
+                            sbLegendString.AppendFormat("'{0}'", curSer.LegendText);
+                        }
+                    }
+                }
+            }
+
+            if(LegendVisible && hasLegend)
+            {
+                if(AddMarkers)
+                    sbBeforeLegend.AppendFormat("legend({0}, 'Location','NorthEastOutside');", sbLegendString).AppendLine().AppendLine();
+                else
+                    sbAfterLegend.AppendFormat("legend({0}, 'Location','NorthEastOutside');", sbLegendString).AppendLine().AppendLine();
+            }
+
+            if(!String.IsNullOrWhiteSpace(AxisXTitle))
+            {
+                sbAfterLegend.AppendFormat("xlabel('{0}');", AxisXTitle).AppendLine();
+            }
+
+            if(!String.IsNullOrWhiteSpace(AxisYTitle))
+            {
+                sbAfterLegend.AppendFormat("ylabel('{0}');", AxisYTitle).AppendLine();
+            }
+
+            if(!String.IsNullOrWhiteSpace(Title))
+            {
+                sbAfterLegend.AppendFormat("title('{0}');", Title).AppendLine();
+            }
+            
+            sbBeforeLegend.Append(sbAfterLegend);
+
+            return sbBeforeLegend.ToString();
+        }
+
+        protected string LineSeriesToMatlabVar(Series series, int serIndex, int valuePerLine)
+        {
+            var pts = series.Points;
+            var serCount = pts.Count;
+            if (serCount <= 0)
+                return ""; // nothing to export for nothing
+
+            var sbSerY = new StringBuilder(1000);
+            var sbSerX = new StringBuilder(100);
+
+            sbSerY.AppendFormat("s{0} = [ ", serIndex);
+            sbSerX.AppendFormat("sx{0} = ", serIndex);
+
+
+            double x0 = pts[0].XValue;
+            double x1 = pts[serCount - 1].XValue;
+            if (serCount == 1)
+            {
+                sbSerX.AppendFormat("[{0}];", x0).AppendLine();
+            }
+            else
+            {
+                double d = (x1 - x0) / (serCount - 1);
+                if (x0 == x1 && x0 == 0.0)
+                {
+                    x0 = 1.0;
+                    x1 = serCount;
+                    d = 1;
+                }
+
+                sbSerX.AppendFormat("{0}:{1}:{2};", x0, d, x1).AppendLine();
+            }
+
+            for (int i = 0; i < serCount; i++)
+            {
+                sbSerY.AppendFormat("{0} ", pts[i].YValues[0]);
+
+                if((i + 1) % valuePerLine == 0)
+                {
+                    sbSerY.AppendLine("...");
+                    sbSerY.Append("    ");
+                }
+            }
+
+            sbSerY.AppendLine("];");
+
+            sbSerX.AppendLine().Append(sbSerY);
+
+            sbSerX.AppendFormat("pl{0} = plot(sx{0}, s{0});", serIndex).AppendLine();
+            sbSerX.AppendFormat("set(pl{0}, 'Color', {1});", serIndex, ColorToMatlabColor(series.Color)).AppendLine(); 
+
+            if (series.Name.StartsWith(SeriesMarkerPrefix))
+            {
+                sbSerX.AppendFormat("set(pl{0}, 'Marker', '{1}', 'LineStyle','none', 'MarkerSize', {2});", 
+                    serIndex, MarkerToMatlabMarker(series.MarkerStyle), (int)(series.MarkerSize / 1.0)).AppendLine();
+            }
+
+            return sbSerX.ToString();
+        }
+
+        protected string MarkerToMatlabMarker(MarkerStyle markerStyle)
+        {
+            switch (markerStyle)
+            {
+                case MarkerStyle.None:
+                    return "none";
+                case MarkerStyle.Square:
+                    return "square";
+                case MarkerStyle.Circle:
+                    return "o";
+                case MarkerStyle.Diamond:
+                    return "diamond";
+                case MarkerStyle.Triangle:
+                    return "^";
+                case MarkerStyle.Cross:
+                    return "x";
+                case MarkerStyle.Star4:
+                    return "v";
+                case MarkerStyle.Star5:
+                    return "pentagram";
+                case MarkerStyle.Star6:
+                    return "hexagram";
+                case MarkerStyle.Star10:
+                    return "*";
+                default:
+                    throw new ArgumentOutOfRangeException("markerStyle");
+            }
+        }
+
+        protected string ColorToMatlabColor(Color color)
+        {
+            var sb = new StringBuilder(30);
+            sb.AppendFormat("[{0} {1} {2}]", color.R / 255.0, color.G / 255.0, color.B / 255.0);
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Gets the next color from the set of predefined colors.
         /// </summary>
@@ -452,7 +639,7 @@ namespace MSChartWrapper
 
             if (this.AddMarkers && series.ChartType == SeriesChartType.FastLine)
             {
-                markers = mainChart.Series[SeriesPrefix + serName];
+                markers = mainChart.Series[SeriesMarkerPrefix + serName];
             }
 
             var ckBox = new CheckBox
