@@ -24,6 +24,9 @@ namespace MSChartWrapper
         protected bool m_isLegendVisible = false;
         protected bool m_isSideLegendVisible = true;
 
+        protected int m_markerFreq = 0;
+        protected int m_markerCount = 15;
+
         protected const string SeriesMarkerPrefix = "_pt_";
 
         protected static readonly Color[] PredefinedColors = new[] 
@@ -59,7 +62,6 @@ namespace MSChartWrapper
             mainChart.Legends.Clear();
 
             AddMarkers = true;
-            MarkerCounts = 15;
             MarkerSize = 8;
         }
 
@@ -95,12 +97,22 @@ namespace MSChartWrapper
         /// </value>
         [Category("ChartWrapper")]
         [Description("Indicates the number of markers to be drawn onto " +
-        "a line chart. The line chart is divided in the specified " +
-        "number of devision and a marker is placed on every border. " +
-        "If you wish to specify marker positions in terms of data counts, " +
-        "set this property to 0 and use the 'MarkerFreq' " +
-        "property instead.")]
-        public int MarkerCounts { get; set; } // set to 0 to disable each
+                     "a line chart. The line chart is divided in the specified " +
+                     "number of devision and a marker is placed on every border. " +
+                     "If you wish to specify marker positions in terms of data counts, " +
+                     "set this property to 0 and use the 'MarkerFreq' " +
+                     "property instead.")]
+        public int MarkerCounts
+        {
+            get { return m_markerCount; }
+            set 
+            {
+                // set to 0 to disable each
+                if (value != 0)
+                    m_markerFreq = 0; // disable the other
+                m_markerCount = value; 
+            }
+        } 
 
         /// <summary>
         /// Gets or sets the number of data items after which a marker should 
@@ -115,11 +127,20 @@ namespace MSChartWrapper
         /// </value>
         [Category("ChartWrapper")]
         [Description("Indicates the number of data items after which a marker should " +
-        "be placed. If you wish to specify the total number of markers and " +
-        "position them accordingly, " +
-        "set this property to 0 and use the 'AddMarkers' " +
-        "property instead.")]
-        public int MarkerFreq { get; set; }
+                     "be placed. If you wish to specify the total number of markers and " +
+                     "position them accordingly, " +
+                     "set this property to 0 and use the 'AddMarkers' " +
+                     "property instead.")]
+        public int MarkerFreq
+        {
+            get { return m_markerFreq; }
+            set
+            {
+                if (value != 0)
+                    m_markerCount = 0;
+                m_markerFreq = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the size of each marker symbol.
