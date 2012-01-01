@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.IO;
 using System.ComponentModel;
-using System.Linq;
 using System.Text;
 
 namespace MSChartWrapper
@@ -38,13 +37,6 @@ namespace MSChartWrapper
             MarkerStyle.Star10, MarkerStyle.Star4, MarkerStyle.Star5, MarkerStyle.Star6,
             MarkerStyle.Triangle
         };
-
-        protected static readonly string[] MatlabMarkers = new[]
-        { 
-            "o", "+", "diamond"
-        };
-
-
 
         #endregion
 
@@ -297,7 +289,7 @@ namespace MSChartWrapper
         /// </summary>
         public void SaveChart()
         {
-            var dlg = new SaveFileDialog {Filter = "MATLAB M File|*.m|png|*.png|jpg|*.jpg|tiff|*.tiff"};
+            var dlg = new SaveFileDialog { Filter = "png|*.png|jpg|*.jpg|MATLAB M File|*.m|tiff|*.tiff" };
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -384,7 +376,6 @@ namespace MSChartWrapper
             foreach (double t in values)
                 seriesPoints.AddY(t);
 
-
             if (this.AddMarkers && (this.MarkerCounts > 0 || this.MarkerFreq > 0))
             {
                 curSeries.IsVisibleInLegend = false;
@@ -449,18 +440,31 @@ namespace MSChartWrapper
             var sers = TheChart.Series;
             var serCount = sers.Count;
 
+            var lstColumnSers = new List<Series>();
+            int maxColSerCount = Int32.MinValue;
+            int maxColSerIndex = -1;
+
             bool hasLegend = false;
             for (int si = 0; si < serCount; si++)
             {
                 var curSer = sers[si];
-                if (curSer.ChartType == SeriesChartType.Bar)
+                if (curSer.ChartType == SeriesChartType.Column)
                 {
+                    lstColumnSers.Add(curSer);
+                    var ptCount = curSer.Points.Count;
+                    if (ptCount > maxColSerCount)
+                    {
+                        maxColSerCount = ptCount;
+                        maxColSerIndex = lstColumnSers.Count - 1;
+                    }
+
+                    hasLegend = true;
                 }
                 else
                 {
                     if (!curSer.Name.StartsWith(SeriesMarkerPrefix)) // if not a marker
                     {
-                        sbAfterLegend.AppendLine(LineSeriesToMatlabVar(curSer, si, 10));
+                        sbAfterLegend.AppendLine(LineSeriesToMatlab(curSer, si, 10));
                         sbAfterLegend.AppendLine().AppendLine("hold on");
                         if (!AddMarkers)
                         {
@@ -472,7 +476,7 @@ namespace MSChartWrapper
                     }
                     else
                     {
-                        sbBeforeLegend.AppendLine(LineSeriesToMatlabVar(curSer, si, 10));
+                        sbBeforeLegend.AppendLine(LineSeriesToMatlab(curSer, si, 10));
                         sbBeforeLegend.AppendLine().AppendLine("hold on");
                         if (AddMarkers)
                         {
@@ -483,6 +487,14 @@ namespace MSChartWrapper
                         }
                     }
                 }
+            }
+
+            if(lstColumnSers.Count > 0)
+            {
+                if(AddMarkers)
+                    sbBeforeLegend.AppendLine(ColumnSeriesToMatlab(lstColumnSers, sbLegendString, maxColSerIndex, 10));
+                else
+                    sbAfterLegend.AppendLine(ColumnSeriesToMatlab(lstColumnSers, sbLegendString, maxColSerIndex, 10));
             }
 
             if(LegendVisible && hasLegend)
@@ -513,7 +525,76 @@ namespace MSChartWrapper
             return sbBeforeLegend.ToString();
         }
 
-        protected string LineSeriesToMatlabVar(Series series, int serIndex, int valuePerLine)
+        private string ColumnSeriesToMatlab(List<Series> allColSeries, 
+            StringBuilder sbLegends, int maxSerIndex, int valuePerLine)
+        {
+            if (allColSeries.Count <= 0)
+                return "";
+
+            int maxSerLength = allColSeries[maxSerIndex].Points.Count;
+            
+            var sbSerLabels = new StringBuilder(1000);
+            sbSerLabels.Append("set(gca,'XTickLabel',{");
+
+            var sbBarValues = new StringBuilder(1000);
+            sbBarValues.Append("barValues = [ ");
+
+            var sbBarColors = new StringBuilder(1000);
+
+            for(int seri = 0; seri < allColSeries.Count; seri++)
+            {
+                var curSer = allColSeries[seri];
+                var pts = curSer.Points;
+                int serLen = pts.Count;
+                if (sbLegends.Length > 0)
+                    sbLegends.Append(", ");
+                sbLegends.AppendFormat("'{0}'", curSer.Name);
+
+                sbBarColors.AppendFormat("set(plBar({0}), 'FaceColor', {1});",  
+                    seri + 1, ColorToMatlabColor(curSer.Color)).AppendLine();
+
+                for(int i = 0; i < serLen; i++)
+                {
+                    sbBarValues.AppendFormat("{0} ", pts[i].YValues[0]);
+                    if (seri == maxSerIndex)
+                        sbSerLabels.AppendFormat("'{0}'{1} ", pts[i].AxisLabel, (i < serLen - 1 ? "," : ""));
+
+                    if ((i + 1) % valuePerLine == 0)
+                    {
+                        sbBarValues.AppendLine("...");
+                        sbBarValues.Append("    ");
+
+                        if (seri == maxSerIndex)
+                        {
+                            sbSerLabels.AppendLine("...");
+                            sbSerLabels.Append("    ");
+                        }
+                    }
+                }
+
+                for(int i = 0; i < maxSerLength - serLen; i++)
+                {
+                    sbBarValues.AppendFormat("{0} ", 0.0);
+                }
+
+                if (seri < allColSeries.Count - 1)
+                {
+                    sbBarValues.AppendLine(";"); // go to the next column
+                    sbBarValues.Append("    ");
+                }
+            }
+            sbBarValues.Append("];").AppendLine();
+            sbSerLabels.AppendLine("});");
+
+            sbBarValues.AppendFormat("plBar = bar(barValues');").AppendLine();
+            sbBarValues.Append(sbBarColors).AppendLine();
+
+            sbBarValues.Append(sbSerLabels).AppendLine();
+
+            return sbBarValues.ToString();
+        }
+
+        protected string LineSeriesToMatlab(Series series, int serIndex, int valuePerLine)
         {
             var pts = series.Points;
             var serCount = pts.Count;
@@ -526,7 +607,6 @@ namespace MSChartWrapper
             sbSerY.AppendFormat("s{0} = [ ", serIndex);
             sbSerX.AppendFormat("sx{0} = ", serIndex);
 
-
             double x0 = pts[0].XValue;
             double x1 = pts[serCount - 1].XValue;
             if (serCount == 1)
@@ -536,7 +616,7 @@ namespace MSChartWrapper
             else
             {
                 double d = (x1 - x0) / (serCount - 1);
-                if (x0 == x1 && x0 == 0.0)
+                if (Math.Abs(x0 - x1) < 0.00000001 && Math.Abs(x0 - 0.0) < 0.00000001)
                 {
                     x0 = 1.0;
                     x1 = serCount;
