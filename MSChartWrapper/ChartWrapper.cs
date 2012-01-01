@@ -310,14 +310,17 @@ namespace MSChartWrapper
         /// </summary>
         public void SaveChart()
         {
-            var dlg = new SaveFileDialog { Filter = "png|*.png|jpg|*.jpg|MATLAB M File|*.m|tiff|*.tiff" };
+            var dlg = new SaveFileDialog 
+            {
+                Filter = "png|*.png|jpg|*.jpg|MATLAB M File|*.m|tiff|*.tiff|Emf|*.emf|Emf-Dual|*.emf|Emf-Plus|*.emf|Bmp|*.bmp|Gif|*.gif"
+            };
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
-            string ext = Path.GetExtension(dlg.FileName);
-            Debug.Assert(ext != null);
-            ext = ext.ToLower();
-            if (ext == ".m")
+            // keep the switch case in synch with the SaveDialogFile.Filter property above
+            int filterIndex = dlg.FilterIndex; // the index is 1-based
+
+            if(filterIndex == 3) // i.e., Matlab m file
             {
                 File.WriteAllText(dlg.FileName, SaveAsMatlab());
             }
@@ -325,17 +328,34 @@ namespace MSChartWrapper
             {
                 ChartImageFormat format = ChartImageFormat.Jpeg;
 
-                switch (ext)
+                switch (filterIndex)
                 {
-                    case ".jpg":
-                        format = ChartImageFormat.Jpeg;
-                        break;
-                    case ".png":
+                    case 1:
                         format = ChartImageFormat.Png;
                         break;
-                    case ".tiff":
+                    case 2:
+                        format = ChartImageFormat.Jpeg;
+                        break;
+                    case 4:
                         format = ChartImageFormat.Tiff;
                         break;
+                    case 5:
+                        format = ChartImageFormat.Emf;
+                        break;
+                    case 6:
+                        format = ChartImageFormat.EmfDual;
+                        break;
+                    case 7:
+                        format = ChartImageFormat.EmfPlus;
+                        break;
+                    case 8:
+                        format = ChartImageFormat.Bmp;
+                        break;
+                    case 9:
+                        format = ChartImageFormat.Gif;
+                        break;
+                    default:
+                        throw new Exception("Unknown file type");
                 }
                 mainChart.SaveImage(dlg.FileName, format);
             }
