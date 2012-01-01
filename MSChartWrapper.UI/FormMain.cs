@@ -6,7 +6,7 @@ namespace MSChartWrapper.UI
 {
     public partial class FormMain : Form
     {
-        private const int ArraySize = 10;
+        private const int ArraySize = 20;
 
         private static readonly Random s_rnd = new Random();
         private int m_numCharts = 1;

@@ -243,7 +243,7 @@ namespace MSChartWrapper
                     {
                         mainChart.Legends.Add(name);
                     }
-
+                    
                     mainChart.ChartAreas[0].Position.Width = 80.0f;
                 }
 
@@ -368,6 +368,10 @@ namespace MSChartWrapper
             for (int i = 0; i < labels.Length; i++)
                 curSeries.Points.AddXY(labels[i], values[i]);
 
+            // this will force the empty legend to show the initial plot
+            if (m_isLegendVisible && m_seriesNames.Count == 1)
+                mainChart.Legends.Add(serName);
+
             if (m_seriesNames.Count > 1)
             {
                 AddSideLegend(serName);
@@ -388,6 +392,7 @@ namespace MSChartWrapper
 
             string serName = name;
             Series curSeries = mainChart.Series.Add(serName);
+
             curSeries.LegendText = serName;
             m_seriesNames.Add(serName);
             curSeries.ChartType = SeriesChartType.FastLine;
@@ -426,6 +431,17 @@ namespace MSChartWrapper
                     for (int i = 0; i < values.Length; i += markerFreq)
                         ptSeriesPoints.AddXY(i + 1, values[i]);
                 }
+                ptSeries.IsVisibleInLegend = true;
+
+                // this will force the empty legend to show the initial plot
+                if (m_isLegendVisible && m_seriesNames.Count == 1)
+                    mainChart.Legends.Add(serName);
+            }
+            else
+            {
+                // this will force the empty legend to show the initial plot
+                if (m_isLegendVisible && m_seriesNames.Count == 1)
+                    mainChart.Legends.Add(serName);
             }
 
             if (m_seriesNames.Count > 1)
