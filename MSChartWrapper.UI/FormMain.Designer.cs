@@ -80,7 +80,7 @@ namespace MSChartWrapper.UI
             this.chartWrapper.AxisYTitle = "";
             this.chartWrapper.LegendVisible = false;
             this.chartWrapper.Location = new System.Drawing.Point(8, 32);
-            this.chartWrapper.MarkerCounts = 15;
+            this.chartWrapper.MarkerCount = 15;
             this.chartWrapper.MarkerFreq = 0;
             this.chartWrapper.MarkerSize = 8;
             this.chartWrapper.Name = "chartWrapper";

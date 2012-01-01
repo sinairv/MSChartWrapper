@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace MSChartWrapper.UI
 {
@@ -75,10 +71,10 @@ namespace MSChartWrapper.UI
         "If you wish to specify marker positions in terms of data counts, " +
         "set this property to 0 and use the 'MarkerFreq' " +
         "property instead.")]
-        public int MarkerCounts
+        public int MarkerCount
         {
-            get { return m_chartWrapper.MarkerCounts; }
-            set { m_chartWrapper.MarkerCounts = value; }
+            get { return m_chartWrapper.MarkerCount; }
+            set { m_chartWrapper.MarkerCount = value; }
         }
 
         [Category("ChartWrapper")]

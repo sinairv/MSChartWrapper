@@ -102,7 +102,7 @@ namespace MSChartWrapper
                      "If you wish to specify marker positions in terms of data counts, " +
                      "set this property to 0 and use the 'MarkerFreq' " +
                      "property instead.")]
-        public int MarkerCounts
+        public int MarkerCount
         {
             get { return m_markerCount; }
             set 
@@ -397,7 +397,7 @@ namespace MSChartWrapper
             foreach (double t in values)
                 seriesPoints.AddY(t);
 
-            if (this.AddMarkers && (this.MarkerCounts > 0 || this.MarkerFreq > 0))
+            if (this.AddMarkers && (this.MarkerCount > 0 || this.MarkerFreq > 0))
             {
                 curSeries.IsVisibleInLegend = false;
 
@@ -411,9 +411,9 @@ namespace MSChartWrapper
                 ptSeries.MarkerStyle = GetNextMarkerStyle();
 
                 int markerFreq = 0;
-                if (this.MarkerCounts > 0)
+                if (this.MarkerCount > 0)
                 {
-                    markerFreq = values.Length / this.MarkerCounts;
+                    markerFreq = values.Length / this.MarkerCount;
                 }
                 else if (this.MarkerFreq > 0)
                 {
