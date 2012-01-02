@@ -33,6 +33,14 @@ Even easier, if you want to show a chart in a separate window, just as easy as y
 		new[] { "Firs Series", "Second Series" }, new[] { ser1, ser2 }, 
 		"Comparing the series", "x", "value", "Line Chart Window Demo");
 
+
+# Nuget
+
+Along with its [Github page](https://github.com/sinairv/MSChartWrapper), you can also install *MSChartWrapper* through [Nuget](https://nuget.org/packages/MSChartWrapper/):
+
+	Install-Package MSChartWrapper 
+
+
 # Screenshots
 
 A simple line chart:
