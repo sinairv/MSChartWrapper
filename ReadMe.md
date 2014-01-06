@@ -45,15 +45,15 @@ Along with its [Github page](https://github.com/sinairv/MSChartWrapper), you can
 
 A simple line chart:
 
-![A simple line chart](http://sinairv.github.com/MSChartWrapper/images/LineChart.png)
+![A simple line chart](http://www.sinairv.com/MSChartWrapper/images/LineChart.png)
 
 A simple column chart:
 
-![A simple column chart](http://sinairv.github.com/MSChartWrapper/images/ColumnChart.png)
+![A simple column chart](http://www.sinairv.com/MSChartWrapper/images/ColumnChart.png)
 
 Highlighting the UI features:
 
-![Highlighting the features](http://sinairv.github.com/MSChartWrapper/images/Capabilities.png)
+![Highlighting the features](http://www.sinairv.com/MSChartWrapper/images/Capabilities.png)
 
 # Contact
 
